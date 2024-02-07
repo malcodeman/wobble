@@ -47,7 +47,7 @@ type Shape = {
   radius: number;
 };
 
-export const Canvas = () => {
+const Canvas = () => {
   const [shapes, setShapes] = useState<Shape[]>(INITIAL_SHAPES);
   const [measurements, ref] = useMeasure<HTMLDivElement>();
 
@@ -99,3 +99,5 @@ export const Canvas = () => {
     </div>
   );
 };
+
+export default Canvas;
