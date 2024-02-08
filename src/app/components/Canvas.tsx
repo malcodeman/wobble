@@ -12,6 +12,8 @@ import {
 import { getRandomNumber } from "../lib/utils";
 import { Button } from "../ui/Button";
 import Shape from "./Shape";
+import { Input } from "../ui/Input";
+import { Divider } from "../ui/Divider";
 
 const INITIAL_SHAPES = [
   {
@@ -57,9 +59,12 @@ const Canvas = () => {
   const [shapes, setShapes] = useState<Shape[]>(INITIAL_SHAPES);
   const [play, setPlay] = useState(false);
   const [measurements, ref] = useMeasure<HTMLDivElement>();
-  const duration = 2;
+  const [duration, setDuration] = useState("2");
 
-  useTimeoutEffect(() => setPlay(false), play ? duration * 1000 : undefined);
+  useTimeoutEffect(
+    () => setPlay(false),
+    play ? Number(duration) * 1000 : undefined,
+  );
 
   const handleOnAdd = () => {
     if (measurements) {
@@ -90,7 +95,7 @@ const Canvas = () => {
         <Stage
           width={measurements.width - 240}
           height={measurements.height}
-          options={{ backgroundColor: "#fcfcfd" }}
+          options={{ backgroundColor: 0xfcfcfd }}
         >
           {shapes.map((shape, index) => (
             <Shape
@@ -99,7 +104,7 @@ const Canvas = () => {
               isPlaying={play}
               x={shape.x}
               y={shape.y}
-              duration={duration}
+              duration={Number(duration)}
             />
           ))}
         </Stage>
@@ -107,6 +112,13 @@ const Canvas = () => {
       <div>
         <div className="flex flex-col gap-2 p-2">
           <Button onClick={handleOnAdd}>Add shape</Button>
+          <Divider className="my-4" />
+          <Input
+            label="Duration"
+            rightSection="sec"
+            value={duration}
+            onChange={(e) => setDuration(e.currentTarget.value)}
+          />
           <Button
             icon={
               play ? (

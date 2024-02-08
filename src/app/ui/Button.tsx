@@ -1,8 +1,9 @@
+import { ButtonHTMLAttributes } from "react";
+
 type Props = {
   icon?: React.ReactNode;
   children?: React.ReactNode;
-  onClick?: () => void;
-};
+} & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const Button = (props: Props) => {
   const { icon, children, ...rest } = props;
