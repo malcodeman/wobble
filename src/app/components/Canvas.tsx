@@ -8,6 +8,7 @@ import {
   IconPlayerPauseFilled,
   IconPlayerPlayFilled,
 } from "@tabler/icons-react";
+import { saveAs } from "file-saver";
 
 import { getRandomNumber } from "../lib/utils";
 import { Button } from "../ui/Button";
@@ -89,6 +90,14 @@ const Canvas = () => {
     graphics.endFill();
   };
 
+  const handleOnDownload = () => {
+    const blob = new Blob([JSON.stringify(shapes)], {
+      type: "application/json",
+    });
+
+    saveAs(blob, `shapes.json`);
+  };
+
   return (
     <div ref={ref} className="grid h-screen grid-cols-[1fr_240px] bg-gray-900">
       {measurements ? (
@@ -131,6 +140,8 @@ const Canvas = () => {
           >
             {play ? "Pause" : "Play"}
           </Button>
+          <Divider className="my-4" />
+          <Button onClick={handleOnDownload}>Download .json</Button>
         </div>
       </div>
     </div>
