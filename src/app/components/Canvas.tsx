@@ -1,11 +1,17 @@
 "use client";
-import { Stage, Graphics as PixiGraphics } from "@pixi/react";
-import { useMeasure } from "@react-hookz/web";
+import { Stage } from "@pixi/react";
+import { useMeasure, useTimeoutEffect } from "@react-hookz/web";
 import { ColorSource, Graphics } from "pixi.js";
 import { useState } from "react";
 import randomcolor from "randomcolor";
+import {
+  IconPlayerPauseFilled,
+  IconPlayerPlayFilled,
+} from "@tabler/icons-react";
 
 import { getRandomNumber } from "../lib/utils";
+import { Button } from "../ui/Button";
+import Shape from "./Shape";
 
 const INITIAL_SHAPES = [
   {
@@ -49,7 +55,11 @@ type Shape = {
 
 const Canvas = () => {
   const [shapes, setShapes] = useState<Shape[]>(INITIAL_SHAPES);
+  const [play, setPlay] = useState(false);
   const [measurements, ref] = useMeasure<HTMLDivElement>();
+  const duration = 2;
+
+  useTimeoutEffect(() => setPlay(false), play ? duration * 1000 : undefined);
 
   const handleOnAdd = () => {
     if (measurements) {
@@ -68,34 +78,49 @@ const Canvas = () => {
     }
   };
 
-  const handleDraw = (graphics: Graphics) => {
-    return shapes.map((shape) => {
-      graphics.beginFill(shape.color, shape.alpha);
-      graphics.drawRoundedRect(
-        shape.x,
-        shape.y,
-        shape.width,
-        shape.height,
-        shape.radius,
-      );
-      graphics.endFill();
-    });
+  const handleDraw = (graphics: Graphics, shape: Shape) => {
+    graphics.beginFill(shape.color, shape.alpha);
+    graphics.drawRoundedRect(0, 0, shape.width, shape.height, shape.radius);
+    graphics.endFill();
   };
 
   return (
-    <div ref={ref} className="h-[calc(100vh-40px)] bg-[#18181b]">
-      <header className="flex items-center justify-center p-2">
-        <span className="text-white" onClick={handleOnAdd}>
-          Rectangle
-        </span>
-      </header>
-      <Stage
-        width={measurements?.width}
-        height={measurements?.height}
-        options={{ backgroundColor: "#fcfcfd" }}
-      >
-        <PixiGraphics draw={(g) => handleDraw(g)} />
-      </Stage>
+    <div ref={ref} className="grid h-screen grid-cols-[1fr_240px] bg-gray-900">
+      {measurements ? (
+        <Stage
+          width={measurements.width - 240}
+          height={measurements.height}
+          options={{ backgroundColor: "#fcfcfd" }}
+        >
+          {shapes.map((shape, index) => (
+            <Shape
+              key={index}
+              draw={(g) => handleDraw(g, shape)}
+              isPlaying={play}
+              x={shape.x}
+              y={shape.y}
+              duration={duration}
+            />
+          ))}
+        </Stage>
+      ) : null}
+      <div>
+        <div className="flex flex-col gap-2 p-2">
+          <Button onClick={handleOnAdd}>Add shape</Button>
+          <Button
+            icon={
+              play ? (
+                <IconPlayerPauseFilled size={16} />
+              ) : (
+                <IconPlayerPlayFilled size={16} />
+              )
+            }
+            onClick={() => setPlay(!play)}
+          >
+            {play ? "Pause" : "Play"}
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
