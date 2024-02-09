@@ -3,22 +3,34 @@ import { Stage } from "@pixi/react";
 import { useMeasure } from "@react-hookz/web";
 import { formatDistanceToNow } from "date-fns";
 import { IconDots, IconLink, IconTrash } from "@tabler/icons-react";
+import toast from "react-hot-toast";
 
 import { Project as ProjectType } from "../types";
 import Shape from "./Shape";
 import { onDraw } from "../utils";
 import { Menu, MenuButton, MenuItem, MenuList } from "../ui/Menu";
+import { useProjects } from "../hooks/useProjects";
 
 const Project = (props: ProjectType) => {
   const { id, title, shapes, createdAt } = props;
   const [measurements, ref] = useMeasure<HTMLDivElement>();
+  const { deleteProject } = useProjects();
 
-  const handleOnCopyLink = () => {
-    console.log("Copy link");
+  const handleOnCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(
+        `${window.location.origin}/projects/${id}`,
+      );
+      toast.success("Link copied");
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    }
   };
 
   const handleOnDelete = () => {
-    console.log("Delete");
+    deleteProject(id);
   };
 
   return (

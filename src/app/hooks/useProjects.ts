@@ -45,11 +45,21 @@ export const useProjects = () => {
     }
   };
 
+  const deleteProject = (id: string) => {
+    if (projects) {
+      const nextProjects = projects.filter((project) => project.id !== id);
+
+      setProjects(nextProjects);
+      return nextProjects;
+    }
+  };
+
   return {
     projects: projects || [],
     setProjects,
     newProject,
     setProject,
     getProject,
+    deleteProject,
   };
 };

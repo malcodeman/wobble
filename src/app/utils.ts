@@ -1,4 +1,5 @@
 import { Graphics } from "pixi.js";
+import toast from "react-hot-toast";
 
 import { DrawableShape } from "./types";
 
@@ -37,11 +38,13 @@ export const onImport = async (files: File[]) => {
     if (isShapeArray(json)) {
       return json;
     } else {
-      console.error("Invalid shape data:", json);
+      toast.error("Invalid shape data");
       return null;
     }
   } catch (error) {
-    console.error(error);
+    if (error instanceof Error) {
+      toast.error(error.message);
+    }
     return null;
   }
 };
