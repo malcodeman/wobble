@@ -1,12 +1,16 @@
 "use client";
 import { IconPlus } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 
 import { useProjects } from "./hooks/useProjects";
 import { Button } from "./ui/Button";
 import { FileUpload } from "./components/FileUpload";
 import { onImport } from "./utils";
-import { Project } from "./components/Project";
+
+const DynamicProject = dynamic(() => import("./components/Project"), {
+  ssr: false,
+});
 
 export default function Home() {
   const router = useRouter();
@@ -39,7 +43,7 @@ export default function Home() {
       </div>
       <div className="grid grid-cols-[repeat(auto-fill,minmax(272px,1fr))] gap-4">
         {projects.map((project) => (
-          <Project
+          <DynamicProject
             key={project.id}
             id={project.id}
             title={project.title}

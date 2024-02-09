@@ -9,7 +9,7 @@ import Shape from "./Shape";
 import { onDraw } from "../utils";
 import { Menu, MenuButton, MenuItem, MenuList } from "../ui/Menu";
 
-export const Project = (props: ProjectType) => {
+const Project = (props: ProjectType) => {
   const { id, title, shapes, createdAt } = props;
   const [measurements, ref] = useMeasure<HTMLDivElement>();
 
@@ -66,3 +66,5 @@ export const Project = (props: ProjectType) => {
     </div>
   );
 };
+
+export default Project;
