@@ -54,6 +54,21 @@ export const useProjects = () => {
     }
   };
 
+  const duplicateProject = (id: string) => {
+    if (projects) {
+      const project = projects.find((project) => project.id === id);
+
+      if (project) {
+        const duplicate = newProject({
+          title: `Copy of ${project.title}`,
+          shapes: project.shapes,
+        });
+
+        return duplicate;
+      }
+    }
+  };
+
   return {
     projects: projects || [],
     setProjects,
@@ -61,5 +76,6 @@ export const useProjects = () => {
     setProject,
     getProject,
     deleteProject,
+    duplicateProject,
   };
 };

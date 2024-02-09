@@ -2,8 +2,9 @@ import Link from "next/link";
 import { Stage } from "@pixi/react";
 import { useMeasure } from "@react-hookz/web";
 import { formatDistanceToNow } from "date-fns";
-import { IconDots, IconLink, IconTrash } from "@tabler/icons-react";
+import { IconCopy, IconDots, IconLink, IconTrash } from "@tabler/icons-react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 import { Project as ProjectType } from "../types";
 import Shape from "./Shape";
@@ -14,7 +15,14 @@ import { useProjects } from "../hooks/useProjects";
 const Project = (props: ProjectType) => {
   const { id, title, shapes, createdAt } = props;
   const [measurements, ref] = useMeasure<HTMLDivElement>();
-  const { deleteProject } = useProjects();
+  const { deleteProject, duplicateProject } = useProjects();
+  const router = useRouter();
+
+  const handleOnDuplicate = () => {
+    const project = duplicateProject(id);
+
+    router.push(`/projects/${project?.id}`);
+  };
 
   const handleOnCopyLink = async () => {
     try {
@@ -66,6 +74,9 @@ const Project = (props: ProjectType) => {
             <IconDots size={16} />
           </MenuButton>
           <MenuList>
+            <MenuItem icon={<IconCopy size={16} />} onClick={handleOnDuplicate}>
+              Duplicate
+            </MenuItem>
             <MenuItem icon={<IconLink size={16} />} onClick={handleOnCopyLink}>
               Copy link
             </MenuItem>
