@@ -7,6 +7,7 @@ export const INITIAL_SHAPES = [
     width: 200,
     height: 200,
     radius: 0,
+    shapeType: "rectangle" as const,
   },
   {
     color: "#ACF2EB",
@@ -15,7 +16,8 @@ export const INITIAL_SHAPES = [
     y: 400,
     width: 100,
     height: 100,
-    radius: 0,
+    radius: 50,
+    shapeType: "ellipse" as const,
   },
   {
     color: "#BF3124",
@@ -25,5 +27,6 @@ export const INITIAL_SHAPES = [
     width: 100,
     height: 100,
     radius: 0,
+    shapeType: "rectangle" as const,
   },
 ];

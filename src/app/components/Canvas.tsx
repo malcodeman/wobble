@@ -17,13 +17,14 @@ import Shape from "./Shape";
 import { Input } from "../ui/Input";
 import { Divider } from "../ui/Divider";
 import { FileUpload } from "./FileUpload";
-import { Shape as ShapeType } from "../types";
+import { DrawableShape, ShapeType } from "../types";
 
 const Canvas = () => {
-  const [shapes, setShapes] = useState<ShapeType[]>(INITIAL_SHAPES);
+  const [shapes, setShapes] = useState<DrawableShape[]>(INITIAL_SHAPES);
   const [play, setPlay] = useState(false);
   const [measurements, ref] = useMeasure<HTMLDivElement>();
   const [duration, setDuration] = useState("2");
+  const [activeShape, setActiveShape] = useState<ShapeType>("rectangle");
 
   useTimeoutEffect(
     () => setPlay(false),
@@ -41,15 +42,29 @@ const Canvas = () => {
           y: getRandomNumber(0, measurements.height),
           width: getRandomNumber(10, 200),
           height: getRandomNumber(10, 200),
-          radius: 0,
+          radius: activeShape === "ellipse" ? getRandomNumber(10, 100) : 0,
+          shapeType: activeShape,
         },
       ]);
     }
   };
 
-  const handleDraw = (graphics: Graphics, shape: ShapeType) => {
+  const handleDraw = (graphics: Graphics, shape: DrawableShape) => {
     graphics.beginFill(shape.color, shape.alpha);
-    graphics.drawRoundedRect(0, 0, shape.width, shape.height, shape.radius);
+
+    switch (shape.shapeType) {
+      default:
+      case "rectangle":
+        graphics.drawRoundedRect(0, 0, shape.width, shape.height, shape.radius);
+        break;
+      case "ellipse":
+        graphics.drawCircle(0, 0, shape.radius);
+        break;
+      case "polygon":
+        graphics.drawPolygon([-100, -50, 100, -50, 0, 100]);
+        break;
+    }
+
     graphics.endFill();
   };
 
@@ -107,6 +122,29 @@ const Canvas = () => {
       ) : null}
       <div>
         <div className="flex flex-col gap-2 p-2">
+          <span className="isolate inline-flex">
+            <Button
+              onClick={() => setActiveShape("rectangle")}
+              isActive={activeShape === "rectangle"}
+              className="rounded-none rounded-l-md"
+            >
+              Rectangle
+            </Button>
+            <Button
+              onClick={() => setActiveShape("ellipse")}
+              isActive={activeShape === "ellipse"}
+              className="-ml-px rounded-none"
+            >
+              Ellipse
+            </Button>
+            <Button
+              onClick={() => setActiveShape("polygon")}
+              isActive={activeShape === "polygon"}
+              className="-ml-px rounded-none rounded-r-md"
+            >
+              Polygon
+            </Button>
+          </span>
           <Button onClick={handleOnAdd}>Add shape</Button>
           <Divider className="my-4" />
           <Input

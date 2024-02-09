@@ -1,6 +1,8 @@
 import { ColorSource } from "pixi.js";
 
-export type Shape = {
+export type ShapeType = "rectangle" | "ellipse" | "polygon";
+
+export type DrawableShape = {
   color: ColorSource;
   alpha: number;
   x: number;
@@ -8,4 +10,5 @@ export type Shape = {
   width: number;
   height: number;
   radius: number;
+  shapeType: ShapeType;
 };
