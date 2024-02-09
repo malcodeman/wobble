@@ -7,6 +7,7 @@ import randomcolor from "randomcolor";
 import {
   IconPlayerPauseFilled,
   IconPlayerPlayFilled,
+  IconRepeat,
 } from "@tabler/icons-react";
 import { saveAs } from "file-saver";
 
@@ -22,12 +23,17 @@ import { DrawableShape, ShapeType } from "../types";
 const Canvas = () => {
   const [shapes, setShapes] = useState<DrawableShape[]>(INITIAL_SHAPES);
   const [play, setPlay] = useState(false);
+  const [repeat, setRepeat] = useState(false);
   const [measurements, ref] = useMeasure<HTMLDivElement>();
   const [duration, setDuration] = useState("2");
   const [activeShape, setActiveShape] = useState<ShapeType>("rectangle");
 
-  useTimeoutEffect(
-    () => setPlay(false),
+  const [_cancel, reset] = useTimeoutEffect(
+    () => {
+      if (!repeat) {
+        setPlay(false);
+      }
+    },
     play ? Number(duration) * 1000 : undefined,
   );
 
@@ -99,6 +105,15 @@ const Canvas = () => {
     );
   };
 
+  const handleOnRepeat = () => {
+    setRepeat((prev) => {
+      if (prev) {
+        reset();
+      }
+      return !prev;
+    });
+  };
+
   return (
     <div ref={ref} className="grid h-screen grid-cols-[1fr_240px] bg-gray-900">
       {measurements ? (
@@ -153,18 +168,26 @@ const Canvas = () => {
             value={duration}
             onChange={(e) => setDuration(e.currentTarget.value)}
           />
-          <Button
-            icon={
-              play ? (
-                <IconPlayerPauseFilled size={16} />
-              ) : (
-                <IconPlayerPlayFilled size={16} />
-              )
-            }
-            onClick={() => setPlay(!play)}
-          >
-            {play ? "Pause" : "Play"}
-          </Button>
+          <div className="inline-flex gap-2">
+            <Button
+              className="w-full"
+              icon={
+                play ? (
+                  <IconPlayerPauseFilled size={16} />
+                ) : (
+                  <IconPlayerPlayFilled size={16} />
+                )
+              }
+              onClick={() => setPlay(!play)}
+            >
+              {play ? "Pause" : "Play"}
+            </Button>
+            <Button
+              isActive={repeat}
+              icon={<IconRepeat size={16} />}
+              onClick={handleOnRepeat}
+            />
+          </div>
           <Divider className="my-4" />
           <FileUpload onDrop={handleOnImport} />
           <Button onClick={handleOnDownload}>Download .json</Button>
