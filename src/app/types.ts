@@ -1,5 +1,12 @@
 import { ColorSource } from "pixi.js";
 
+export type Project = {
+  id: string;
+  title: string;
+  createdAt: number;
+  shapes: DrawableShape[];
+};
+
 export type ShapeType = "rectangle" | "ellipse" | "polygon";
 
 export type DrawableShape = {

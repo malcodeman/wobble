@@ -10,15 +10,15 @@ import {
   IconRepeat,
 } from "@tabler/icons-react";
 import { saveAs } from "file-saver";
+import { Button } from "@/app/ui/Button";
+import { DrawableShape, ShapeType } from "@/app/types";
+import { Divider } from "@/app/ui/Divider";
+import { Input } from "@/app/ui/Input";
 
-import { file2Text, getRandomNumber, isShapeArray } from "../lib/utils";
-import { INITIAL_SHAPES } from "../lib/constants";
-import { Button } from "../ui/Button";
+import { INITIAL_SHAPES } from "../constants";
+import { file2Text, getRandomNumber, isShapeArray } from "../utils";
 import Shape from "./Shape";
-import { Input } from "../ui/Input";
-import { Divider } from "../ui/Divider";
 import { FileUpload } from "./FileUpload";
-import { DrawableShape, ShapeType } from "../types";
 
 const Canvas = () => {
   const [shapes, setShapes] = useState<DrawableShape[]>(INITIAL_SHAPES);
@@ -115,7 +115,7 @@ const Canvas = () => {
   };
 
   return (
-    <div ref={ref} className="grid h-screen grid-cols-[1fr_240px] bg-gray-900">
+    <div ref={ref} className="grid h-screen grid-cols-[1fr_240px]">
       {measurements ? (
         <Stage
           width={measurements.width - 240}

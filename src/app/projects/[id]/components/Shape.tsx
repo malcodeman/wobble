@@ -18,6 +18,7 @@ const Shape = (props: Props) => {
 
   useTick((delta) => {
     const rotationPerTick = 360 / (duration * 60);
+
     setAngle((prev) => (prev + rotationPerTick * delta) % 360);
   }, isPlaying);
 

@@ -1,5 +1,5 @@
 import { useDropzone } from "react-dropzone";
-import { Button } from "../ui/Button";
+import { Button } from "@/app/ui/Button";
 
 type Props = {
   onDrop: (files: File[]) => void;
