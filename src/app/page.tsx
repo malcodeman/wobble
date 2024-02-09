@@ -1,12 +1,12 @@
 "use client";
 import { IconPlus } from "@tabler/icons-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { useProjects } from "./hooks/useProjects";
 import { Button } from "./ui/Button";
 import { FileUpload } from "./components/FileUpload";
 import { onImport } from "./utils";
+import { Project } from "./components/Project";
 
 export default function Home() {
   const router = useRouter();
@@ -37,11 +37,17 @@ export default function Home() {
         </Button>
         <FileUpload onDrop={handleOnImport} />
       </div>
-      {projects.map((project) => (
-        <div key={project.id}>
-          <Link href={`/projects/${project.id}`}>{project.title}</Link>
-        </div>
-      ))}
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(272px,1fr))] gap-4">
+        {projects.map((project) => (
+          <Project
+            key={project.id}
+            id={project.id}
+            title={project.title}
+            createdAt={project.createdAt}
+            shapes={project.shapes}
+          />
+        ))}
+      </div>
     </div>
   );
 }

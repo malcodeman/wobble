@@ -17,10 +17,10 @@ import { Divider } from "@/app/ui/Divider";
 import { Input } from "@/app/ui/Input";
 import { useProjects } from "@/app/hooks/useProjects";
 import { FileUpload } from "@/app/components/FileUpload";
-import { onImport } from "@/app/utils";
+import Shape from "@/app/components/Shape";
+import { onImport, onDraw } from "@/app/utils";
 
 import { getRandomNumber } from "../utils";
-import Shape from "./Shape";
 
 const Canvas = () => {
   const params = useParams();
@@ -71,25 +71,6 @@ const Canvas = () => {
     }
   };
 
-  const handleDraw = (graphics: Graphics, shape: DrawableShape) => {
-    graphics.beginFill(shape.color, shape.alpha);
-
-    switch (shape.shapeType) {
-      default:
-      case "rectangle":
-        graphics.drawRoundedRect(0, 0, shape.width, shape.height, shape.radius);
-        break;
-      case "ellipse":
-        graphics.drawCircle(0, 0, shape.radius);
-        break;
-      case "polygon":
-        graphics.drawPolygon([-100, -50, 100, -50, 0, 100]);
-        break;
-    }
-
-    graphics.endFill();
-  };
-
   const handleOnImport = async (files: File[]) => {
     const shapes = await onImport(files);
 
@@ -138,7 +119,7 @@ const Canvas = () => {
           {shapes.map((shape, index) => (
             <Shape
               key={index}
-              draw={(g) => handleDraw(g, shape)}
+              draw={(g) => onDraw(g, shape)}
               onColorChange={() => handleOnColorChange(index)}
               isPlaying={play}
               x={shape.x}

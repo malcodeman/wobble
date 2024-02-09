@@ -5,11 +5,11 @@ import "@pixi/events";
 
 type Props = {
   draw: (g: Graphics) => void;
-  onColorChange: () => void;
-  isPlaying: boolean;
+  onColorChange?: () => void;
+  isPlaying?: boolean;
   x: number;
   y: number;
-  duration: number;
+  duration?: number;
 };
 
 const Shape = (props: Props) => {
@@ -17,9 +17,11 @@ const Shape = (props: Props) => {
   const [angle, setAngle] = useState(0);
 
   useTick((delta) => {
-    const rotationPerTick = 360 / (duration * 60);
+    if (duration) {
+      const rotationPerTick = 360 / (duration * 60);
 
-    setAngle((prev) => (prev + rotationPerTick * delta) % 360);
+      setAngle((prev) => (prev + rotationPerTick * delta) % 360);
+    }
   }, isPlaying);
 
   return (

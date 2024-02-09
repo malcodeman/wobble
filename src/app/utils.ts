@@ -1,3 +1,5 @@
+import { Graphics } from "pixi.js";
+
 import { DrawableShape } from "./types";
 
 export const file2Text = (file: File) => {
@@ -42,4 +44,23 @@ export const onImport = async (files: File[]) => {
     console.error(error);
     return null;
   }
+};
+
+export const onDraw = (graphics: Graphics, shape: DrawableShape) => {
+  graphics.beginFill(shape.color, shape.alpha);
+
+  switch (shape.shapeType) {
+    default:
+    case "rectangle":
+      graphics.drawRoundedRect(0, 0, shape.width, shape.height, shape.radius);
+      break;
+    case "ellipse":
+      graphics.drawCircle(0, 0, shape.radius);
+      break;
+    case "polygon":
+      graphics.drawPolygon([-100, -50, 100, -50, 0, 100]);
+      break;
+  }
+
+  graphics.endFill();
 };
