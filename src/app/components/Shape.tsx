@@ -1,9 +1,11 @@
 import { Graphics as PixiGraphics, useTick } from "@pixi/react";
 import { Graphics } from "pixi.js";
 import { useState } from "react";
+import "@pixi/events";
 
 type Props = {
   draw: (g: Graphics) => void;
+  onColorChange: () => void;
   isPlaying: boolean;
   x: number;
   y: number;
@@ -11,7 +13,7 @@ type Props = {
 };
 
 const Shape = (props: Props) => {
-  const { draw, isPlaying, x, y, duration } = props;
+  const { draw, onColorChange, isPlaying, x, y, duration } = props;
   const [angle, setAngle] = useState(0);
 
   useTick((delta) => {
@@ -22,10 +24,13 @@ const Shape = (props: Props) => {
   return (
     <PixiGraphics
       draw={draw}
-      angle={isPlaying ? angle : undefined}
+      onclick={onColorChange}
+      angle={angle}
       anchor={0.5}
       x={x}
       y={y}
+      interactive
+      cursor="pointer"
     />
   );
 };

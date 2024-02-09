@@ -72,6 +72,14 @@ const Canvas = () => {
     saveAs(blob, `shapes.json`);
   };
 
+  const handleOnColorChange = (index: number) => {
+    setShapes((shapes) =>
+      shapes.map((shape, i) =>
+        i === index ? { ...shape, color: randomcolor() } : shape,
+      ),
+    );
+  };
+
   return (
     <div ref={ref} className="grid h-screen grid-cols-[1fr_240px] bg-gray-900">
       {measurements ? (
@@ -84,6 +92,7 @@ const Canvas = () => {
             <Shape
               key={index}
               draw={(g) => handleDraw(g, shape)}
+              onColorChange={() => handleOnColorChange(index)}
               isPlaying={play}
               x={shape.x}
               y={shape.y}
