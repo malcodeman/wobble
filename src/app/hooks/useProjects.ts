@@ -21,19 +21,21 @@ export const useProjects = () => {
 
     if (projects) {
       setProjects([...projects, project]);
+      return project;
     }
   };
 
   const setProject = (id: string, data: Partial<Project>) => {
     if (projects) {
-      setProjects(
-        projects.map((project) => {
-          if (project.id === id) {
-            return { ...project, ...data };
-          }
-          return project;
-        }),
-      );
+      const nextProjects = projects.map((project) => {
+        if (project.id === id) {
+          return { ...project, ...data };
+        }
+        return project;
+      });
+
+      setProjects(nextProjects);
+      return nextProjects;
     }
   };
 
