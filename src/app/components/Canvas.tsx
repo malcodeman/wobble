@@ -1,7 +1,7 @@
 "use client";
 import { Stage } from "@pixi/react";
 import { useMeasure, useTimeoutEffect } from "@react-hookz/web";
-import { ColorSource, Graphics } from "pixi.js";
+import { Graphics } from "pixi.js";
 import { useState } from "react";
 import randomcolor from "randomcolor";
 import {
@@ -10,54 +10,17 @@ import {
 } from "@tabler/icons-react";
 import { saveAs } from "file-saver";
 
-import { getRandomNumber } from "../lib/utils";
+import { file2Text, getRandomNumber } from "../lib/utils";
+import { INITIAL_SHAPES } from "../lib/constants";
 import { Button } from "../ui/Button";
 import Shape from "./Shape";
 import { Input } from "../ui/Input";
 import { Divider } from "../ui/Divider";
-
-const INITIAL_SHAPES = [
-  {
-    color: "#304673",
-    alpha: 1,
-    x: 250,
-    y: 200,
-    width: 200,
-    height: 200,
-    radius: 0,
-  },
-  {
-    color: "#ACF2EB",
-    alpha: 1,
-    x: 450,
-    y: 400,
-    width: 100,
-    height: 100,
-    radius: 0,
-  },
-  {
-    color: "#BF3124",
-    alpha: 1,
-    x: 600,
-    y: 400,
-    width: 100,
-    height: 100,
-    radius: 0,
-  },
-];
-
-type Shape = {
-  color: ColorSource;
-  alpha: number;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  radius: number;
-};
+import { FileUpload } from "./FileUpload";
+import { Shape as ShapeType } from "../types";
 
 const Canvas = () => {
-  const [shapes, setShapes] = useState<Shape[]>(INITIAL_SHAPES);
+  const [shapes, setShapes] = useState<ShapeType[]>(INITIAL_SHAPES);
   const [play, setPlay] = useState(false);
   const [measurements, ref] = useMeasure<HTMLDivElement>();
   const [duration, setDuration] = useState("2");
@@ -84,10 +47,21 @@ const Canvas = () => {
     }
   };
 
-  const handleDraw = (graphics: Graphics, shape: Shape) => {
+  const handleDraw = (graphics: Graphics, shape: ShapeType) => {
     graphics.beginFill(shape.color, shape.alpha);
     graphics.drawRoundedRect(0, 0, shape.width, shape.height, shape.radius);
     graphics.endFill();
+  };
+
+  const handleOnImport = async (acceptedFiles: File[]) => {
+    try {
+      const text = await file2Text(acceptedFiles[0]);
+      const json = JSON.parse(text);
+
+      setShapes(json);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleOnDownload = () => {
@@ -141,6 +115,7 @@ const Canvas = () => {
             {play ? "Pause" : "Play"}
           </Button>
           <Divider className="my-4" />
+          <FileUpload onDrop={handleOnImport} />
           <Button onClick={handleOnDownload}>Download .json</Button>
         </div>
       </div>
