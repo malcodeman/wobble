@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.18",
     "@pixi/react": "^7.1.1",
     "@react-hookz/web": "^24.0.4",
     "@tabler/icons-react": "^2.47.0",
