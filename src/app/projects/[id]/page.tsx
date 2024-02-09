@@ -4,6 +4,6 @@ const DynamicCanvas = dynamic(() => import("./components/Canvas"), {
   ssr: false,
 });
 
-export default function Home() {
+export default function Project() {
   return <DynamicCanvas />;
 }

@@ -19,3 +19,9 @@ export type DrawableShape = {
   radius: number;
   shapeType: ShapeType;
 };
+
+export type Template = {
+  id: string;
+  title: string;
+  shapes: DrawableShape[];
+};
