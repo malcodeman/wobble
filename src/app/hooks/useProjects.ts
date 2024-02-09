@@ -24,9 +24,30 @@ export const useProjects = () => {
     }
   };
 
+  const setProject = (id: string, data: Partial<Project>) => {
+    if (projects) {
+      setProjects(
+        projects.map((project) => {
+          if (project.id === id) {
+            return { ...project, ...data };
+          }
+          return project;
+        }),
+      );
+    }
+  };
+
+  const getProject = (id: string) => {
+    if (projects) {
+      return projects.find((project) => project.id === id);
+    }
+  };
+
   return {
     projects: projects || [],
     setProjects,
     newProject,
+    setProject,
+    getProject,
   };
 };

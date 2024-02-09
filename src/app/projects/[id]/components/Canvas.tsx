@@ -2,7 +2,7 @@
 import { Stage } from "@pixi/react";
 import { useMeasure, useTimeoutEffect } from "@react-hookz/web";
 import { Graphics } from "pixi.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import randomcolor from "randomcolor";
 import {
   IconPlayerPauseFilled,
@@ -10,23 +10,34 @@ import {
   IconRepeat,
 } from "@tabler/icons-react";
 import { saveAs } from "file-saver";
+import { useParams } from "next/navigation";
 import { Button } from "@/app/ui/Button";
 import { DrawableShape, ShapeType } from "@/app/types";
 import { Divider } from "@/app/ui/Divider";
 import { Input } from "@/app/ui/Input";
+import { useProjects } from "@/app/hooks/useProjects";
 
-import { INITIAL_SHAPES } from "../constants";
 import { file2Text, getRandomNumber, isShapeArray } from "../utils";
 import Shape from "./Shape";
 import { FileUpload } from "./FileUpload";
 
 const Canvas = () => {
-  const [shapes, setShapes] = useState<DrawableShape[]>(INITIAL_SHAPES);
+  const params = useParams();
+  const id = params.id as string;
+  const { getProject, setProject } = useProjects();
+  const project = getProject(id);
+  const [shapes, setShapes] = useState<DrawableShape[]>([]);
   const [play, setPlay] = useState(false);
   const [repeat, setRepeat] = useState(false);
   const [measurements, ref] = useMeasure<HTMLDivElement>();
   const [duration, setDuration] = useState("2");
   const [activeShape, setActiveShape] = useState<ShapeType>("rectangle");
+
+  useEffect(() => {
+    if (project) {
+      setShapes(project.shapes);
+    }
+  }, [project]);
 
   const [_cancel, reset] = useTimeoutEffect(
     () => {
@@ -39,19 +50,19 @@ const Canvas = () => {
 
   const handleOnAdd = () => {
     if (measurements) {
-      setShapes((prev) => [
-        ...prev,
-        {
-          color: randomcolor(),
-          alpha: 1,
-          x: getRandomNumber(0, measurements.width),
-          y: getRandomNumber(0, measurements.height),
-          width: getRandomNumber(10, 200),
-          height: getRandomNumber(10, 200),
-          radius: activeShape === "ellipse" ? getRandomNumber(10, 100) : 0,
-          shapeType: activeShape,
-        },
-      ]);
+      const nextShape = {
+        color: randomcolor(),
+        alpha: 1,
+        x: getRandomNumber(0, measurements.width),
+        y: getRandomNumber(0, measurements.height),
+        width: getRandomNumber(10, 200),
+        height: getRandomNumber(10, 200),
+        radius: activeShape === "ellipse" ? getRandomNumber(10, 100) : 0,
+        shapeType: activeShape,
+      };
+
+      setShapes((prev) => [...prev, nextShape]);
+      setProject(id, { shapes: [...shapes, nextShape] });
     }
   };
 
@@ -81,6 +92,7 @@ const Canvas = () => {
 
       if (isShapeArray(json)) {
         setShapes(json);
+        setProject(id, { shapes: json });
       } else {
         console.error("Invalid shape data:", json);
       }
