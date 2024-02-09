@@ -16,10 +16,11 @@ import { DrawableShape, ShapeType } from "@/app/types";
 import { Divider } from "@/app/ui/Divider";
 import { Input } from "@/app/ui/Input";
 import { useProjects } from "@/app/hooks/useProjects";
+import { FileUpload } from "@/app/components/FileUpload";
+import { onImport } from "@/app/utils";
 
-import { file2Text, getRandomNumber, isShapeArray } from "../utils";
+import { getRandomNumber } from "../utils";
 import Shape from "./Shape";
-import { FileUpload } from "./FileUpload";
 
 const Canvas = () => {
   const params = useParams();
@@ -85,19 +86,12 @@ const Canvas = () => {
     graphics.endFill();
   };
 
-  const handleOnImport = async (acceptedFiles: File[]) => {
-    try {
-      const text = await file2Text(acceptedFiles[0]);
-      const json = JSON.parse(text);
+  const handleOnImport = async (files: File[]) => {
+    const shapes = await onImport(files);
 
-      if (isShapeArray(json)) {
-        setShapes(json);
-        setProject(id, { shapes: json });
-      } else {
-        console.error("Invalid shape data:", json);
-      }
-    } catch (error) {
-      console.error(error);
+    if (shapes) {
+      setShapes(shapes);
+      setProject(id, { shapes });
     }
   };
 

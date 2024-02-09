@@ -11,12 +11,12 @@ export const useProjects = () => {
     initializeWithValue: false,
   });
 
-  const newProject = (data?: { name: string }) => {
+  const newProject = (data?: Partial<Project>) => {
     const project = {
       id: nanoid(),
-      title: data?.name || "Untitled Project",
+      title: data?.title || "Untitled Project",
       createdAt: Date.now(),
-      shapes: [],
+      shapes: data?.shapes || [],
     };
 
     if (projects) {
