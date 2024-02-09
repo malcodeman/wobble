@@ -10,7 +10,7 @@ import {
 } from "@tabler/icons-react";
 import { saveAs } from "file-saver";
 
-import { file2Text, getRandomNumber } from "../lib/utils";
+import { file2Text, getRandomNumber, isShapeArray } from "../lib/utils";
 import { INITIAL_SHAPES } from "../lib/constants";
 import { Button } from "../ui/Button";
 import Shape from "./Shape";
@@ -58,7 +58,11 @@ const Canvas = () => {
       const text = await file2Text(acceptedFiles[0]);
       const json = JSON.parse(text);
 
-      setShapes(json);
+      if (isShapeArray(json)) {
+        setShapes(json);
+      } else {
+        console.error("Invalid shape data:", json);
+      }
     } catch (error) {
       console.error(error);
     }
