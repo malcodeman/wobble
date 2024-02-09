@@ -62,8 +62,12 @@ const Canvas = () => {
         shapeType: activeShape,
       };
 
-      setShapes((prev) => [...prev, nextShape]);
-      setProject(id, { shapes: [...shapes, nextShape] });
+      setShapes((prev) => {
+        const nextShapes = [...prev, nextShape];
+
+        setProject(id, { shapes: nextShapes });
+        return nextShapes;
+      });
     }
   };
 
@@ -104,11 +108,14 @@ const Canvas = () => {
   };
 
   const handleOnColorChange = (index: number) => {
-    setShapes((shapes) =>
-      shapes.map((shape, i) =>
+    setShapes((prev) => {
+      const nextShapes = prev.map((shape, i) =>
         i === index ? { ...shape, color: randomcolor() } : shape,
-      ),
-    );
+      );
+
+      setProject(id, { shapes: nextShapes });
+      return nextShapes;
+    });
   };
 
   const handleOnRepeat = () => {
