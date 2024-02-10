@@ -1,7 +1,6 @@
 "use client";
 import { Stage } from "@pixi/react";
 import { useMeasure, useTimeoutEffect } from "@react-hookz/web";
-import { Graphics } from "pixi.js";
 import { useEffect, useState } from "react";
 import randomcolor from "randomcolor";
 import {
