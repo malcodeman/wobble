@@ -13,7 +13,7 @@ import { Menu, MenuButton, MenuItem, MenuList } from "../ui/Menu";
 import { useProjects } from "../hooks/useProjects";
 
 const Project = (props: ProjectType) => {
-  const { id, title, shapes, createdAt } = props;
+  const { id, title, shapes, updatedAt } = props;
   const [measurements, ref] = useMeasure<HTMLDivElement>();
   const { deleteProject, duplicateProject } = useProjects();
   const router = useRouter();
@@ -66,7 +66,7 @@ const Project = (props: ProjectType) => {
         <div>
           <div className="mb-0.5 text-white">{title}</div>
           <span className="text-sm text-zinc-500">
-            Created {formatDistanceToNow(createdAt, { addSuffix: true })}
+            Updated {formatDistanceToNow(updatedAt, { addSuffix: true })}
           </span>
         </div>
         <Menu>

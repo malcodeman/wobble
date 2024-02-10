@@ -2,6 +2,7 @@
 import {
   IconAlphabetLatin,
   IconClockHour3,
+  IconEdit,
   IconPlus,
   IconSortDescending,
 } from "@tabler/icons-react";
@@ -15,6 +16,7 @@ import { FileUpload } from "./components/FileUpload";
 import { onImport } from "./utils";
 import { Header } from "./components/Header";
 import { Menu, MenuButton, MenuItem, MenuList } from "./ui/Menu";
+import { SortBy } from "./types";
 
 const DynamicProject = dynamic(() => import("./components/Project"), {
   ssr: false,
@@ -23,7 +25,7 @@ const DynamicProject = dynamic(() => import("./components/Project"), {
 export default function Home() {
   const router = useRouter();
   const { projects, newProject } = useProjects();
-  const [sortBy, setSortBy] = useState<"createdAt" | "title">("createdAt");
+  const [sortBy, setSortBy] = useState<SortBy>("updatedAt");
 
   const handleOnNew = () => {
     const project = newProject();
@@ -42,12 +44,28 @@ export default function Home() {
   };
 
   const sortedProjects = projects.sort((a, b) => {
-    if (sortBy === "createdAt") {
-      return b.createdAt - a.createdAt;
+    switch (sortBy) {
+      default:
+      case "updatedAt":
+        return b.updatedAt - a.updatedAt;
+      case "createdAt":
+        return b.createdAt - a.createdAt;
+      case "title":
+        return a.title.localeCompare(b.title);
     }
-
-    return a.title.localeCompare(b.title);
   });
+
+  const renderSortMenuButtonText = () => {
+    switch (sortBy) {
+      default:
+      case "updatedAt":
+        return "Updated";
+      case "createdAt":
+        return "Created";
+      case "title":
+        return "Title";
+    }
+  };
 
   return (
     <div>
@@ -57,9 +75,15 @@ export default function Home() {
           <h1 className="mb-2 text-xl text-white">Projects</h1>
           <Menu>
             <MenuButton icon={<IconSortDescending size={16} />}>
-              {sortBy === "createdAt" ? "Created" : "Title"}
+              {renderSortMenuButtonText()}
             </MenuButton>
             <MenuList>
+              <MenuItem
+                icon={<IconEdit size={16} />}
+                onClick={() => setSortBy("updatedAt")}
+              >
+                Updated
+              </MenuItem>
               <MenuItem
                 icon={<IconClockHour3 size={16} />}
                 onClick={() => setSortBy("createdAt")}
@@ -99,6 +123,7 @@ export default function Home() {
                 id={project.id}
                 title={project.title}
                 createdAt={project.createdAt}
+                updatedAt={project.updatedAt}
                 shapes={project.shapes}
               />
             ))}

@@ -16,6 +16,7 @@ export const useProjects = () => {
       id: nanoid(),
       title: data?.title || "Untitled Project",
       createdAt: Date.now(),
+      updatedAt: Date.now(),
       shapes: data?.shapes || [],
     };
 
@@ -29,7 +30,7 @@ export const useProjects = () => {
     if (projects) {
       const nextProjects = projects.map((project) => {
         if (project.id === id) {
-          return { ...project, ...data };
+          return { ...project, ...data, updatedAt: Date.now() };
         }
         return project;
       });

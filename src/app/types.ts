@@ -4,6 +4,7 @@ export type Project = {
   id: string;
   title: string;
   createdAt: number;
+  updatedAt: number;
   shapes: DrawableShape[];
 };
 
@@ -25,3 +26,5 @@ export type Template = {
   title: string;
   shapes: DrawableShape[];
 };
+
+export type SortBy = "updatedAt" | "createdAt" | "title";
