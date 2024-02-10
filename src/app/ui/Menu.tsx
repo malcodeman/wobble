@@ -3,9 +3,11 @@ import { Menu as HeadlessMenu, Transition } from "@headlessui/react";
 import clsx from "clsx";
 
 export const MenuButton = ({
+  icon,
   children,
   ...rest
 }: {
+  icon?: React.ReactNode;
   children: React.ReactNode;
 }) => {
   return (
@@ -14,6 +16,7 @@ export const MenuButton = ({
       {...rest}
     >
       <span className="sr-only">Open options</span>
+      {icon}
       {children}
     </HeadlessMenu.Button>
   );
