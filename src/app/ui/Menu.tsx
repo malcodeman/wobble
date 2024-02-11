@@ -22,7 +22,13 @@ export const MenuButton = ({
   );
 };
 
-export const MenuList = ({ children }: { children: React.ReactNode }) => {
+export const MenuList = ({
+  children,
+  placement = "bottom-start",
+}: {
+  children: React.ReactNode;
+  placement?: "bottom-start" | "bottom-end";
+}) => {
   return (
     <Transition
       as={Fragment}
@@ -33,7 +39,12 @@ export const MenuList = ({ children }: { children: React.ReactNode }) => {
       leaveFrom="transform opacity-100 scale-100"
       leaveTo="transform opacity-0 scale-95"
     >
-      <HeadlessMenu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-[#29303d] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+      <HeadlessMenu.Items
+        className={clsx(
+          "absolute z-10 mt-2 w-56 origin-top-right rounded-md bg-[#29303d] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none",
+          placement === "bottom-start" ? "right-0" : "left-0",
+        )}
+      >
         <div className="p-2">{children}</div>
       </HeadlessMenu.Items>
     </Transition>

@@ -4,13 +4,16 @@ import { useMeasure, useTimeoutEffect } from "@react-hookz/web";
 import { useEffect, useState } from "react";
 import randomcolor from "randomcolor";
 import {
+  IconCopy,
+  IconDots,
+  IconEdit,
   IconHome,
   IconPlayerPauseFilled,
   IconPlayerPlayFilled,
   IconRepeat,
 } from "@tabler/icons-react";
 import { saveAs } from "file-saver";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/app/ui/Button";
 import { DrawableShape, ShapeType } from "@/app/types";
@@ -22,11 +25,13 @@ import Shape from "@/app/components/Shape";
 import { onImport, onDraw } from "@/app/utils";
 
 import { getRandomNumber } from "../utils";
+import { Menu, MenuButton, MenuItem, MenuList } from "@/app/ui/Menu";
+import { RenameTitleModal } from "@/app/components/RenameTitleModal";
 
 const Canvas = () => {
   const params = useParams();
   const id = params.id as string;
-  const { getProject, setProject } = useProjects();
+  const { getProject, setProject, duplicateProject } = useProjects();
   const project = getProject(id);
   const [shapes, setShapes] = useState<DrawableShape[]>([]);
   const [play, setPlay] = useState(false);
@@ -34,6 +39,8 @@ const Canvas = () => {
   const [measurements, ref] = useMeasure<HTMLDivElement>();
   const [duration, setDuration] = useState("2");
   const [activeShape, setActiveShape] = useState<ShapeType>("rectangle");
+  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (project) {
@@ -109,6 +116,17 @@ const Canvas = () => {
     });
   };
 
+  const handleOnRename = (nextTitle: string) => {
+    setIsOpen(false);
+    setProject(id, { title: nextTitle });
+  };
+
+  const handleOnDuplicate = () => {
+    const project = duplicateProject(id);
+
+    router.push(`/projects/${project?.id}`);
+  };
+
   return (
     <div ref={ref} className="h-[calc(100vh-60px)]">
       <header className="p-4">
@@ -117,6 +135,25 @@ const Canvas = () => {
             <Button icon={<IconHome size={16} />} />
           </Link>
           <span className="text-white">{project?.title}</span>
+          <Menu>
+            <MenuButton>
+              <IconDots size={16} />
+            </MenuButton>
+            <MenuList placement="bottom-end">
+              <MenuItem
+                icon={<IconEdit size={16} />}
+                onClick={() => setIsOpen(true)}
+              >
+                Rename
+              </MenuItem>
+              <MenuItem
+                icon={<IconCopy size={16} />}
+                onClick={handleOnDuplicate}
+              >
+                Duplicate
+              </MenuItem>
+            </MenuList>
+          </Menu>
         </div>
       </header>
       <div className="grid grid-cols-[1fr_240px]">
@@ -199,6 +236,14 @@ const Canvas = () => {
           </div>
         </div>
       </div>
+      {project ? (
+        <RenameTitleModal
+          isOpen={isOpen}
+          title={project.title}
+          onClose={() => setIsOpen(false)}
+          onRename={handleOnRename}
+        />
+      ) : null}
     </div>
   );
 };
