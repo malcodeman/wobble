@@ -14,7 +14,15 @@ type Props = {
 };
 
 const Shape = (props: Props) => {
-  const { draw, onColorChange, isPlaying, x, y, scale, duration } = props;
+  const {
+    draw,
+    onColorChange = null,
+    isPlaying = false,
+    x,
+    y,
+    scale,
+    duration,
+  } = props;
   const [angle, setAngle] = useState(0);
 
   useTick((delta) => {

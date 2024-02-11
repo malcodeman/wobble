@@ -86,6 +86,7 @@ const Project = (props: ProjectType) => {
                   draw={(g) => onDraw(g, shape)}
                   x={shape.x}
                   y={shape.y}
+                  scale={shape.scale}
                 />
               ))}
             </Stage>
