@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Stage } from "@pixi/react";
-import { useMeasure } from "@react-hookz/web";
+import { useIntervalEffect, useMeasure, useRerender } from "@react-hookz/web";
 import { formatDistanceToNow } from "date-fns";
 import {
   IconCopy,
@@ -19,6 +19,20 @@ import { onDraw } from "../utils";
 import { Menu, MenuButton, MenuItem, MenuList } from "../ui/Menu";
 import { useProjects } from "../hooks/useProjects";
 import { RenameTitleModal } from "./RenameTitleModal";
+
+const UpdatedAt = ({ updatedAt }: { updatedAt: number }) => {
+  const rerender = useRerender();
+
+  useIntervalEffect(() => {
+    rerender();
+  }, 10000);
+
+  return (
+    <span className="text-sm text-zinc-500">
+      Updated {formatDistanceToNow(updatedAt, { addSuffix: true })}
+    </span>
+  );
+};
 
 const Project = (props: ProjectType) => {
   const { id, title, shapes, updatedAt } = props;
@@ -80,9 +94,7 @@ const Project = (props: ProjectType) => {
         <div className="flex justify-between">
           <div>
             <div className="mb-0.5 text-white">{title}</div>
-            <span className="text-sm text-zinc-500">
-              Updated {formatDistanceToNow(updatedAt, { addSuffix: true })}
-            </span>
+            <UpdatedAt updatedAt={updatedAt} />
           </div>
           <Menu>
             <MenuButton>
