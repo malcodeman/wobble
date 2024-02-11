@@ -97,7 +97,7 @@ const Project = (props: ProjectType) => {
             <UpdatedAt updatedAt={updatedAt} />
           </div>
           <Menu>
-            <MenuButton>
+            <MenuButton data-testid="project-menu-button">
               <IconDots size={16} />
             </MenuButton>
             <MenuList>

@@ -40,7 +40,9 @@ const Template = (props: TemplateType) => {
       ) : null}
       <div className="flex items-center justify-between">
         <div className="text-white">{title}</div>
-        <Button onClick={handleUseTemplate}>Use template</Button>
+        <Button onClick={handleUseTemplate} data-testid="use-template-button">
+          Use template
+        </Button>
       </div>
     </div>
   );
