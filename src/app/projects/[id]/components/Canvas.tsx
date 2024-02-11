@@ -1,6 +1,10 @@
 "use client";
 import { Stage } from "@pixi/react";
-import { useMeasure, useTimeoutEffect } from "@react-hookz/web";
+import {
+  useIntervalEffect,
+  useMeasure,
+  useTimeoutEffect,
+} from "@react-hookz/web";
 import { useEffect, useState } from "react";
 import randomcolor from "randomcolor";
 import {
@@ -23,10 +27,11 @@ import { useProjects } from "@/app/hooks/useProjects";
 import { FileUpload } from "@/app/components/FileUpload";
 import Shape from "@/app/components/Shape";
 import { onImport, onDraw } from "@/app/utils";
-
-import { getRandomNumber } from "../utils";
 import { Menu, MenuButton, MenuItem, MenuList } from "@/app/ui/Menu";
 import { RenameTitleModal } from "@/app/components/RenameTitleModal";
+
+import { getRandomNumber } from "../utils";
+import { INITIAL_DURATION } from "../constants";
 
 const Canvas = () => {
   const params = useParams();
@@ -37,9 +42,10 @@ const Canvas = () => {
   const [play, setPlay] = useState(false);
   const [repeat, setRepeat] = useState(false);
   const [measurements, ref] = useMeasure<HTMLDivElement>();
-  const [duration, setDuration] = useState("2");
+  const [duration, setDuration] = useState(INITIAL_DURATION);
   const [activeShape, setActiveShape] = useState<ShapeType>("rectangle");
   const [isOpen, setIsOpen] = useState(false);
+  const [isDisco, setIsDisco] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -47,6 +53,33 @@ const Canvas = () => {
       setShapes(project.shapes);
     }
   }, [project]);
+
+  useEffect(() => {
+    if (isDisco) {
+      setPlay(true);
+      setRepeat(true);
+      setDuration("0.6");
+    } else {
+      setPlay(false);
+      setRepeat(false);
+      setDuration(INITIAL_DURATION);
+    }
+  }, [isDisco]);
+
+  useIntervalEffect(
+    () => {
+      setShapes((prev) => {
+        const nextShapes = prev.map((shape) => ({
+          ...shape,
+          color: randomcolor(),
+          scale: getRandomNumber(0.5, 1.5),
+        }));
+
+        return nextShapes;
+      });
+    },
+    isDisco ? 100 : undefined,
+  );
 
   const [_cancel, reset] = useTimeoutEffect(
     () => {
@@ -67,6 +100,7 @@ const Canvas = () => {
         width: getRandomNumber(10, 200),
         height: getRandomNumber(10, 200),
         radius: activeShape === "ellipse" ? getRandomNumber(10, 100) : 0,
+        scale: 1,
         shapeType: activeShape,
       };
 
@@ -172,6 +206,7 @@ const Canvas = () => {
                 isPlaying={play}
                 x={shape.x}
                 y={shape.y}
+                scale={shape.scale}
                 duration={Number(duration)}
               />
             ))}
@@ -230,6 +265,13 @@ const Canvas = () => {
                 onClick={handleOnRepeat}
               />
             </div>
+            <Divider className="my-4" />
+            <Button
+              isActive={isDisco}
+              onClick={() => setIsDisco((prev) => !prev)}
+            >
+              Disco
+            </Button>
             <Divider className="my-4" />
             <FileUpload onDrop={handleOnImport} />
             <Button onClick={handleOnDownload}>Download .json</Button>

@@ -9,11 +9,12 @@ type Props = {
   isPlaying?: boolean;
   x: number;
   y: number;
+  scale: number;
   duration?: number;
 };
 
 const Shape = (props: Props) => {
-  const { draw, onColorChange, isPlaying, x, y, duration } = props;
+  const { draw, onColorChange, isPlaying, x, y, scale, duration } = props;
   const [angle, setAngle] = useState(0);
 
   useTick((delta) => {
@@ -32,6 +33,7 @@ const Shape = (props: Props) => {
       anchor={0.5}
       x={x}
       y={y}
+      scale={scale}
       interactive
       cursor="pointer"
     />

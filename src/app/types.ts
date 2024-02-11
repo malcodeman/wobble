@@ -18,6 +18,7 @@ export type DrawableShape = {
   width: number;
   height: number;
   radius: number;
+  scale: number;
   shapeType: ShapeType;
 };
 
