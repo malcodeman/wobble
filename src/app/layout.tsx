@@ -4,11 +4,12 @@ import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
+import { METADATA } from "./constants";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Wobble",
-  description: "Motion design made simple",
+  ...METADATA,
 };
 
 export default function RootLayout({
