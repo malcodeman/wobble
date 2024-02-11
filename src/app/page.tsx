@@ -100,7 +100,11 @@ export default function Home() {
           </Menu>
         </div>
         <div className="mb-4 inline-flex flex-col gap-2 sm:flex-row">
-          <Button onClick={handleOnNew} icon={<IconPlus size={16} />}>
+          <Button
+            onClick={handleOnNew}
+            icon={<IconPlus size={16} />}
+            data-testid="start-new-project-button"
+          >
             Start new project
           </Button>
           <FileUpload onDrop={handleOnImport} />
