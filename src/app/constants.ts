@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 const TITLE = "wobblewideo";
 const DESCRIPTION = "Motion design made simple.";
-const URL = "https://wobblewideo.vercel.app";
+const URL = "http://localhost:3000";
 
 export const METADATA: Metadata = {
   title: TITLE,
