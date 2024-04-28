@@ -11,7 +11,7 @@
     "e2e:ui": "playwright test --ui"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.18",
+    "@headlessui/react": "^1.7.19",
     "@pixi/react": "^7.1.1",
     "@react-hookz/web": "^24.0.4",
     "@tabler/icons-react": "^2.47.0",
