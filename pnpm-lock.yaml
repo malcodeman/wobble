@@ -15,8 +15,8 @@ importers:
         specifier: ^7.1.2
         version: 7.1.2(05078e3f1293810c4826381f9b912484)
       '@react-hookz/web':
-        specifier: ^24.0.4
-        version: 24.0.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^25.1.1
+        version: 25.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tabler/icons-react':
         specifier: ^2.47.0
         version: 2.47.0(react@18.3.1)
@@ -486,17 +486,13 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  '@react-hookz/deep-equal@1.0.4':
-    resolution: {integrity: sha512-N56fTrAPUDz/R423pag+n6TXWbvlBZDtTehaGFjK0InmN+V2OFWLE/WmORhmn6Ce7dlwH5+tQN1LJFw3ngTJVg==}
-    deprecated: Package is deprecated and will be deleted soon. Use @ver0/deep-equal instead.
-
-  '@react-hookz/web@24.0.4':
-    resolution: {integrity: sha512-DcIM6JiZklDyHF6CRD1FTXzuggAkQ+3Ncq2Wln7Kdih8GV6ZIeN9JfS6ZaQxpQUxan8/4n0J2V/R7nMeiSrb2Q==}
+  '@react-hookz/web@25.1.1':
+    resolution: {integrity: sha512-o1BA+5Z8PCuAnxF7+2TZI+xGBtzyLw8z/flD8AMeJXILYTM8HkI0g41oM7IW/qjUDKx30HKceQQpCKqFGj+iIw==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       js-cookie: ^3.0.5
-      react: ^16.8 || ^17 || ^18
-      react-dom: ^16.8 || ^17 || ^18
+      react: ^16.8 || ^17 || ^18 || ^19
+      react-dom: ^16.8 || ^17 || ^18 || ^19
     peerDependenciesMeta:
       js-cookie:
         optional: true
@@ -687,6 +683,10 @@ packages:
     resolution: {integrity: sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==}
     cpu: [x64]
     os: [win32]
+
+  '@ver0/deep-equal@1.0.0':
+    resolution: {integrity: sha512-XKIlF1i6UJiyTL52mDrSDDgRX7Qr5yJ7ts9zn2liZEmhiAEum4XKrJRAWmHdFwCQeGBU+rb+/b0ldw/9V8lOWw==}
+    engines: {node: '>=18'}
 
   '@vercel/analytics@1.5.0':
     resolution: {integrity: sha512-MYsBzfPki4gthY5HnYN7jgInhAZ7Ac1cYDoRWFomwGHWEX7odTEzbtg9kf/QSo7XEsEAqlQugA6gJ2WS2DEa3g==}
@@ -2608,11 +2608,9 @@ snapshots:
     dependencies:
       playwright: 1.55.0
 
-  '@react-hookz/deep-equal@1.0.4': {}
-
-  '@react-hookz/web@24.0.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@react-hookz/web@25.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@react-hookz/deep-equal': 1.0.4
+      '@ver0/deep-equal': 1.0.0
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
@@ -2770,6 +2768,8 @@ snapshots:
 
   '@unrs/resolver-binding-win32-x64-msvc@1.11.1':
     optional: true
+
+  '@ver0/deep-equal@1.0.0': {}
 
   '@vercel/analytics@1.5.0(next@14.1.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
     optionalDependencies:
